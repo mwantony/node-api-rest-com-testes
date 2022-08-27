@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it, jest } from '@jest/globals';
 import Editora from '../../models/editora.js';
 
 describe('Testando o modelo Editora', () => {
@@ -34,4 +34,26 @@ describe('Testando o modelo Editora', () => {
       }),
     );
   });
+  it('Deve fazer uma chamada ao Banco de Dados', () => {
+    const editora = new Editora(objetoEditora)
+
+    editora.salvar = jest.jn().mockReturnValue({
+      id: 10,
+      nome: 'CDC',
+      cidade: 'São Paulo',
+      email: 'c@c.com',
+      created_at: '2022-10-01',
+      updated_at: '2022-10-01'
+    })
+    const retorno = editora.salvar()
+
+    expect(retorno).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        ...objetoEditora,
+        created_at: expect.any(String),
+        updated_at: expect.any(String),
+      }),
+    );
+  })
 });
