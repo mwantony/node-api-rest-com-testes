@@ -45,9 +45,13 @@ describe('POST em /editoras', async () => {
 });
 
 describe('PUT em /editoras', async () => {
-  it('Deve altera o campo nome', async () => {
+  test.each([
+    { nome: 'Casa do Código' },
+    { cidade: 'SP' },
+    { email: 'cdc@cdc.com' },
+  ])('Deve altera o campo nome', async (param) => {
     await request(app).put(`/editoras/${idResposta}`)
-      .send({ nome: 'Casa do Código' })
+      .send(param)
       .expect(204);
   });
 });
