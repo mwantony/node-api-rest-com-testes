@@ -14,7 +14,6 @@ afterEach(() => {
   server.close();
 });
 
-
 describe('GET em /editoras', async () => {
   it('Deve retornar uma lista de editoras', async () => {
     const resposta = await request(app)
@@ -27,28 +26,40 @@ describe('GET em /editoras', async () => {
   });
 });
 
-let idResposta
+let idResposta;
 
 describe('POST em /editoras', async () => {
- it('Deve adicionar uma nova editora', async () => {
-  const resposta = await request(app)
-    .post('/editoras')
-    .send({
-      nome: 'CDC',
-      cidade: 'Sao Paulo',
-      email 'teste@teste.com'
-    }).expect(201)
- })
- idResposta = resposta.body.content.id
-})
+  it('Deve adicionar uma nova editora', async () => {
+    const resposta = await request(app)
+      .post('/editoras')
+      .send({
+        nome: 'CDC',
+        cidade: 'Sao Paulo',
+        email: 'teste@teste.com',
+      }).expect(201);
+    idResposta = resposta.body.content.id;
+  });
+  it('Deve não adicionar nada ao passar o body vazio', async () => {
+    await request(app).post('/editoras').send({}).expect(400);
+  });
+});
+
+describe('PUT em /editoras', async () => {
+  it('Deve altera o campo nome', async () => {
+    await request(app).put(`/editoras/${idResposta}`)
+      .send({ nome: 'Casa do Código' })
+      .expect(204);
+  });
+});
 
 describe('DELETE em /editoras/idFornecido', async () => {
   it('Deletar o recurso adicionado', async () => {
-    await request(app).delete(`/editoras/${idResposta}`, ).expect(200)
-  })
+    await request(app).delete(`/editoras/${idResposta}`).expect(200);
+  });
+});
 
 describe('GET em /editoras/idFornecido', async () => {
   it('Retorna o recurso adicionado', async () => {
-    await request(app).get(`/editoras/${idResposta}`, ).expect(200)
-  })
-})
+    await request(app).get(`/editoras/${idResposta}`).expect(200);
+  });
+});
