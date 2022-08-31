@@ -1,5 +1,6 @@
 import {
   afterEach, describe, expect, it,
+  jest,
 } from '@jest/globals';
 import request from 'supertest';
 import app from '../../app';
@@ -14,7 +15,7 @@ afterEach(() => {
   server.close();
 });
 
-describe('GET em /editoras', async () => {
+describe('GET em /editoras', () => {
   it('Deve retornar uma lista de editoras', async () => {
     const resposta = await request(app)
       .get('/editoras')
@@ -28,7 +29,7 @@ describe('GET em /editoras', async () => {
 
 let idResposta;
 
-describe('POST em /editoras', async () => {
+describe('POST em /editoras', () => {
   it('Deve adicionar uma nova editora', async () => {
     const resposta = await request(app)
       .post('/editoras')
@@ -44,25 +45,28 @@ describe('POST em /editoras', async () => {
   });
 });
 
-describe('PUT em /editoras', async () => {
+describe('PUT em /editoras', () => {
   test.each([
     { nome: 'Casa do Código' },
     { cidade: 'SP' },
     { email: 'cdc@cdc.com' },
   ])('Deve altera o campo nome', async (param) => {
-    await request(app).put(`/editoras/${idResposta}`)
+    const requisicao = { request };
+    const spy = jest.spyOn(requisicao, 'request');
+    await requisicao.request(app).put(`/editoras/${idResposta}`)
       .send(param)
       .expect(204);
+    expect(spy).toHaveBeenCalled();
   });
 });
 
-describe('DELETE em /editoras/idFornecido', async () => {
+describe('DELETE em /editoras/idFornecido', () => {
   it('Deletar o recurso adicionado', async () => {
     await request(app).delete(`/editoras/${idResposta}`).expect(200);
   });
 });
 
-describe('GET em /editoras/idFornecido', async () => {
+describe('GET em /editoras/idFornecido', () => {
   it('Retorna o recurso adicionado', async () => {
     await request(app).get(`/editoras/${idResposta}`).expect(200);
   });

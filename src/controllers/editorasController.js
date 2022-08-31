@@ -44,7 +44,7 @@ class EditorasController {
       const editoraAtual = await Editora.pegarPeloId(params.id);
       const novaEditora = new Editora({ ...editoraAtual, ...body });
       const resposta = await novaEditora.salvar(novaEditora);
-      return res.status(200).json({ message: 'editora atualizada', content: resposta });
+      return res.status(204).json({ message: 'editora atualizada', content: resposta });
     } catch (err) {
       return res.status(500).json(err.message);
     }

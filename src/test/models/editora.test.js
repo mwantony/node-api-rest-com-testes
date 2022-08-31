@@ -39,7 +39,7 @@ describe('Testando o modelo Editora', () => {
   it('Deve fazer uma chamada ao Banco de Dados', () => {
     const editora = new Editora(objetoEditora);
 
-    editora.salvar = jest.jn().mockReturnValue({
+    editora.salvar = jest.fn().mockReturnValue({
       id: 10,
       nome: 'CDC',
       cidade: 'São Paulo',
